@@ -13,7 +13,6 @@ import java.math.BigDecimal;
 @ApiModel(value = "PaymentDTO Model", description = "PaymentDTO model which is required to generate new payment link")
 public class PaymentDTO {
 
-
     @ApiModelProperty(notes = "Sum of payments in format 0.00 ", required = true, position = 0)
     @JsonProperty(required = true)
     private BigDecimal sumOfAmount;
