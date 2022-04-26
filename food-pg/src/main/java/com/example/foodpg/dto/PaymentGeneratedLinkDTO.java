@@ -4,10 +4,9 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
+@Builder
 @ApiModel(value = "PaymentGeneratedLinkDTO Model", description = "PaymentGeneratedLinkDTO model which is response from /api/payment-with-order-id")
 public class PaymentGeneratedLinkDTO {
 

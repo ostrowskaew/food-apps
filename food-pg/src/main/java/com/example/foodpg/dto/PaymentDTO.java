@@ -19,7 +19,7 @@ public class PaymentDTO {
 
     @ApiModelProperty(notes = "Order number", position = 1)
     @JsonProperty(required = true)
-    private String caseNumber;
+    private String orderNumber;
 
     @ApiModelProperty(notes = "Customer e-mail address", position = 12)
     @JsonProperty(value = "customerEmail", required = false)
