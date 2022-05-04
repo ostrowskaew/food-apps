@@ -13,6 +13,8 @@ import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @Log4j2
 public class PaymentService {
@@ -59,6 +61,7 @@ public class PaymentService {
         payment.setOrderNumber(paymentDTO.getOrderNumber());
         payment.setAmount(paymentDTO.getSumOfAmount());
         payment.setCurrency("PLN");
+        payment.setPaymentDate(LocalDateTime.now());
         payment = paymentRepo.save(payment);
         return payment;
     }
