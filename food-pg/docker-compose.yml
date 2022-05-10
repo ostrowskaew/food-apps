@@ -1,0 +1,31 @@
+version: '2'
+
+services:
+  food-pg:
+    image: 'food-pg:latest'
+    build:
+      dockerfile: Dockerfile
+    networks:
+      - food-network
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/iss-food-backend-db?autoReconnect=true?useUnicode=yes&amp;characterEncoding=UTF-8
+
+  db:
+    image: 'postgres:14'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    networks:
+      - food-network
+
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - food-network
+
+networks:
+  food-network:
+    driver: bridge

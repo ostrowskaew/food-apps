@@ -1,6 +1,6 @@
 package com.example.foodpg.dto;
 
-import com.example.foodpg.enums.PaymentStatusEnum;
+import com.example.foodpg.enums.PaymentStatus;
 import com.example.foodpg.enums.PaymentStatusType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
@@ -22,7 +22,7 @@ public class PaymentStatusDTO {
     private BigInteger orderId;
 
     @ApiModelProperty(notes = "Status of payment", required = true, position = 1)
-    private PaymentStatusEnum paymentStatus;
+    private PaymentStatus paymentStatus;
 
     @ApiModelProperty(notes = "Payment amount", required = true, position = 2)
     private BigDecimal amount;
@@ -34,7 +34,7 @@ public class PaymentStatusDTO {
     @ApiModelProperty(notes = "Status type of payment", required = true, position = 5)
     private PaymentStatusType paymentStatusType;
 
-    public PaymentStatusDTO(BigInteger orderId, PaymentStatusEnum paymentStatus, BigDecimal amount, LocalDateTime paymentDate) {
+    public PaymentStatusDTO(BigInteger orderId, PaymentStatus paymentStatus, BigDecimal amount, LocalDateTime paymentDate) {
         this.orderId = orderId;
         this.paymentStatus = paymentStatus;
         this.amount = amount;

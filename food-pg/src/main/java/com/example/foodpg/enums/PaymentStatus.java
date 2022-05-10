@@ -3,7 +3,7 @@ package com.example.foodpg.enums;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum PaymentStatusEnum {
+public enum PaymentStatus {
     NEW(PaymentStatusType.PENDING, "new"), //Nowa, nieobsłużona transakcja
     PAYMENT_AUTHORIZED(PaymentStatusType.SUCCESS, "authorized"), //Autoryzacja transakcji
     PENDING(PaymentStatusType.PENDING, "pending"), //Oczekiwanie na status
@@ -15,16 +15,16 @@ public enum PaymentStatusEnum {
 
     private PaymentStatusType paymentStatusType;
     private String paymentStatusName;
-    private static final Map<String, PaymentStatusEnum> paymentStatusEnumMap = new HashMap<>();
+    private static final Map<String, PaymentStatus> paymentStatusEnumMap = new HashMap<>();
 
     static {
-        for (PaymentStatusEnum paymentStatus : PaymentStatusEnum.values()) {
+        for (PaymentStatus paymentStatus : PaymentStatus.values()) {
             paymentStatusEnumMap.put(paymentStatus.getPaymentStatusName(), paymentStatus);
         }
     }
 
-    PaymentStatusEnum(PaymentStatusType paymentStatusType,
-                      String paymentStatusName) {
+    PaymentStatus(PaymentStatusType paymentStatusType,
+                  String paymentStatusName) {
         this.paymentStatusType = paymentStatusType;
         this.paymentStatusName = paymentStatusName;
     }
@@ -37,7 +37,7 @@ public enum PaymentStatusEnum {
         return paymentStatusName;
     }
 
-    public static PaymentStatusEnum getPaymentStatusByStatusName(String paymentStatusName) {
+    public static PaymentStatus getPaymentStatusByStatusName(String paymentStatusName) {
         return paymentStatusEnumMap.get(paymentStatusName);
     }
 }
