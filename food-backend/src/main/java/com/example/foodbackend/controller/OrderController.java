@@ -4,21 +4,16 @@ import com.example.foodbackend.dto.OrderProductDto;
 import com.example.foodbackend.model.Order;
 import com.example.foodbackend.model.OrderProduct;
 import com.example.foodbackend.model.OrderStatus;
-import com.example.foodbackend.model.Product;
 import com.example.foodbackend.service.OrderProductService;
 import com.example.foodbackend.service.OrderService;
 import com.example.foodbackend.service.ProductService;
 import com.sun.istack.NotNull;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -39,13 +34,6 @@ public class OrderController {
     private OrderProductService orderProductService;
 
 
-    @ApiOperation(value = "Get all orders",
-            consumes = "application/json",
-            produces = "application/json")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success"),
-            @ApiResponse(code = 500, message = "Internal Server Error - not supported exception")
-    })
     @GetMapping("/api/orders")
     @ResponseStatus(HttpStatus.OK)
     public @NotNull
@@ -60,13 +48,6 @@ public class OrderController {
 
     }
 
-    @ApiOperation(value = "Get user's orders by id number",
-            consumes = "application/json",
-            produces = "application/json")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success"),
-            @ApiResponse(code = 500, message = "Internal Server Error - not supported exception")
-    })
     @GetMapping("/api/orders-by-user-id")
     public Order getUsersOrder(@ApiParam(value = "Id of user", required = true) @NotNull @RequestParam(value = "userId") Long userId ) {
         try {
@@ -79,13 +60,7 @@ public class OrderController {
     }
 
 
-    @ApiOperation(value = "Create order",
-            consumes = "application/json",
-            produces = "application/json")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success"),
-            @ApiResponse(code = 500, message = "Internal Server Error - not supported exception")
-    })
+
     @PostMapping("/api/orders")
     public ResponseEntity<Order> create(@RequestBody OrderForm form) {
         List<OrderProductDto> formDtos = form.getProductOrders();

@@ -22,13 +22,6 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @ApiOperation(value = "Get all the products",
-            consumes = "application/json",
-            produces = "application/json")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success"),
-            @ApiResponse(code = 500, message = "Internal Server Error - not supported exception")
-    })
     @GetMapping("/api/all-products")
     public List<Product> getAllProducts() {
         try {
@@ -40,13 +33,7 @@ public class ProductController {
         }
     }
 
-    @ApiOperation(value = "Get product by id number",
-            consumes = "application/json",
-            produces = "application/json")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success"),
-            @ApiResponse(code = 500, message = "Internal Server Error - not supported exception")
-    })
+
     @GetMapping("/api/product-by-id")
     public Product getProduct(@ApiParam(value = "Id of product", required = true) @NotNull @RequestParam(value = "productId") Long productId ) {
         try {
@@ -59,13 +46,7 @@ public class ProductController {
     }
 
 
-    @ApiOperation(value = "Get products by name",
-            consumes = "application/json",
-            produces = "application/json")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success"),
-            @ApiResponse(code = 500, message = "Internal Server Error - not supported exception")
-    })
+
     @GetMapping("/api/product-by-name")
     public List<Product> getProductByName(@ApiParam(value = "Searched term in product names", required = true)
                                               @NotNull @RequestParam(value = "searchedProductName") String searchedProductName) {
