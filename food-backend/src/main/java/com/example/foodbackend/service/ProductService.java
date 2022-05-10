@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static net.minidev.asm.DefaultConverter.convertToLong;
+
 @Service
 public class ProductService {
 
@@ -21,13 +23,13 @@ public class ProductService {
         return products;
     }
 
-    public Product getProduct(String id) {
-        Optional<Product> optProduct = productRepository.findById(convertToInteger(id));
+    public Product getProduct(Long id) {
+        Optional<Product> optProduct = productRepository.findById(id);
         return optProduct.orElse(null);
     }
 
     public List<Product> getProductByName(String name) {
-        return productRepository.findByNameIgnoreCaseContaining(name);
+        return productRepository.findByNameContainingIgnoreCase(name);
     }
 
     private int convertToInteger(String text) {

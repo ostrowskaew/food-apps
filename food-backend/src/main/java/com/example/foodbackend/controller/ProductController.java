@@ -48,7 +48,7 @@ public class ProductController {
             @ApiResponse(code = 500, message = "Internal Server Error - not supported exception")
     })
     @GetMapping("/api/product-by-id")
-    public Product getProduct(@ApiParam(value = "Id of product", required = true) @NotNull @RequestBody String productId) {
+    public Product getProduct(@ApiParam(value = "Id of product", required = true) @NotNull @RequestParam(value = "productId") Long productId ) {
         try {
             return productService.getProduct(productId);
         } catch (Exception ex)
@@ -67,9 +67,9 @@ public class ProductController {
             @ApiResponse(code = 500, message = "Internal Server Error - not supported exception")
     })
     @GetMapping("/api/product-by-name")
-    public List<Product> getEventByTitle(@ApiParam(value = "Searched term in product names", required = true) @NotNull @RequestBody String searchedName) {
+    public List<Product> getProductByName(@ApiParam(value = "Searched term in product names", required = true) @NotNull @RequestParam(value = "searchedProductName") String searchedProductName) {
         try {
-            return productService.getProductByName(searchedName);
+            return productService.getProductByName(searchedProductName);
         }
         catch (Exception ex)
         {
