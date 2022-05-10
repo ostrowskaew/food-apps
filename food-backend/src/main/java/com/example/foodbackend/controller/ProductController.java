@@ -67,7 +67,8 @@ public class ProductController {
             @ApiResponse(code = 500, message = "Internal Server Error - not supported exception")
     })
     @GetMapping("/api/product-by-name")
-    public List<Product> getProductByName(@ApiParam(value = "Searched term in product names", required = true) @NotNull @RequestParam(value = "searchedProductName") String searchedProductName) {
+    public List<Product> getProductByName(@ApiParam(value = "Searched term in product names", required = true)
+                                              @NotNull @RequestParam(value = "searchedProductName") String searchedProductName) {
         try {
             return productService.getProductByName(searchedProductName);
         }
