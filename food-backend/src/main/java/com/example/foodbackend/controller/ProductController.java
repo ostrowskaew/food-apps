@@ -2,14 +2,9 @@ package com.example.foodbackend.controller;
 import com.example.foodbackend.model.Product;
 import com.example.foodbackend.service.ProductService;
 import com.sun.istack.NotNull;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,12 +12,13 @@ import java.util.List;
 
 @RestController
 @Log4j2
+@CrossOrigin(origins = "http://localhost:4200")
 public class ProductController {
 
     @Autowired
     private ProductService productService;
 
-    @GetMapping("/api/all-products")
+    @GetMapping("/api/products")
     public List<Product> getAllProducts() {
         try {
             return productService.getAllProducts();

@@ -22,6 +22,7 @@ import java.util.List;
 
 @RestController
 @Log4j2
+@CrossOrigin(origins = "http://localhost:4200")
 public class OrderController {
 
     @Autowired
