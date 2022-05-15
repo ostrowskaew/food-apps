@@ -7,6 +7,3 @@
 <h3 class="text-right">Total Amount: {{ total }} PLN</h3>
 <button type="button" class="btn btn-primary btn-block" (click)="pay()"
         *ngIf="!paid">Payment</button>
-<div class="alert alert-success" role="alert" *ngIf="paid">
-  <strong>Congratulations! </strong>you successfully made order.
-</div>
