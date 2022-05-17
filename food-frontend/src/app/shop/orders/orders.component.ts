@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {ProductOrders} from "../models/product-orders";
 import {Subscription} from "rxjs/internal/Subscription";
 import {ShopService} from "../services/ShopService";
+import {ProductOrder} from "../models/product-order";
+import {PaymentLink} from "../models/payment-link";
 
 @Component({
   selector: 'app-orders',
@@ -28,7 +30,13 @@ export class OrdersComponent implements OnInit {
 
   pay() {
     this.paid = true;
-    this.shopService.saveOrder(this.orders).subscribe();
+    this.shopService.saveOrder(this.orders).subscribe(
+      response => {
+        console.log(response)
+        window.open(response.generatedLink, "_blank");
+      },
+      (error) => console.log(error)
+    );
   }
 
   loadTotal() {

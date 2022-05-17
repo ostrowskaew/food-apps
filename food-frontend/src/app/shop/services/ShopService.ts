@@ -3,6 +3,8 @@ import { ProductOrders } from '../models/product-orders';
 import { Subject } from 'rxjs/internal/Subject';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import {Observable} from "rxjs";
+import {PaymentLink} from "../models/payment-link";
 
 @Injectable()
 export class ShopService {
@@ -28,7 +30,7 @@ export class ShopService {
     return this._httpClient.get(this.staticUri+'/api/products');
   }
 
-  saveOrder(order: ProductOrders){
+  saveOrder(order: ProductOrders): Observable<any>{
     return this._httpClient.post(this.staticUri+'/api/orders', order);
   }
 

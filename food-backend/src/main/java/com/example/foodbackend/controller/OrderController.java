@@ -4,8 +4,10 @@ import com.example.foodbackend.dto.OrderProductDto;
 import com.example.foodbackend.model.Order;
 import com.example.foodbackend.model.OrderProduct;
 import com.example.foodbackend.model.OrderStatus;
+import com.example.foodbackend.payment.dto.PaymentGeneratedLinkDTO;
 import com.example.foodbackend.service.OrderProductService;
 import com.example.foodbackend.service.OrderService;
+import com.example.foodbackend.payment.PaymentService;
 import com.example.foodbackend.service.ProductService;
 import com.sun.istack.NotNull;
 import io.swagger.annotations.ApiParam;
@@ -34,6 +36,9 @@ public class OrderController {
     @Autowired
     private OrderProductService orderProductService;
 
+    @Autowired
+    private PaymentService paymentService;
+
 
     @GetMapping("/api/orders")
     @ResponseStatus(HttpStatus.OK)
@@ -41,8 +46,7 @@ public class OrderController {
     Iterable<Order> list() {
         try {
             return orderService.getAllOrders();
-        } catch (Exception ex)
-        {
+        } catch (Exception ex) {
             log.error("Exception getting all orders", ex);
             return null;
         }
@@ -50,20 +54,18 @@ public class OrderController {
     }
 
     @GetMapping("/api/orders-by-user-id")
-    public Order getUsersOrder(@ApiParam(value = "Id of user", required = true) @NotNull @RequestParam(value = "userId") Long userId ) {
+    public Order getUsersOrder(@ApiParam(value = "Id of user", required = true) @NotNull @RequestParam(value = "userId") Long userId) {
         try {
             return orderService.getUsersOrders(userId);
-        } catch (Exception ex)
-        {
+        } catch (Exception ex) {
             log.error("Exception getting product by id", ex);
             return null;
         }
     }
 
 
-
     @PostMapping("/api/orders")
-    public ResponseEntity<Order> create(@RequestBody OrderForm form) {
+    public ResponseEntity<PaymentGeneratedLinkDTO> create(@RequestBody OrderForm form) {
         List<OrderProductDto> formDtos = form.getProductOrders();
         Order order = new Order();
         order.setStatus(OrderStatus.PAID.name());
@@ -80,15 +82,24 @@ public class OrderController {
 
         orderService.update(order);
 
-        String uri = ServletUriComponentsBuilder
-                .fromCurrentServletMapping()
-                .path("/orders/{id}")
-                .buildAndExpand(order.getId())
-                .toString();
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", uri);
+        try {
+            PaymentGeneratedLinkDTO paymentGeneratedLinkDTO = paymentService.payOrder(order);
 
-        return new ResponseEntity<>(order, headers, HttpStatus.CREATED);
+            String uri = ServletUriComponentsBuilder
+                    .fromCurrentServletMapping()
+                    .path("/orders/{id}")
+                    .buildAndExpand(order.getId())
+                    .toString();
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Location", uri);
+
+            return new ResponseEntity<>(paymentGeneratedLinkDTO, headers, HttpStatus.CREATED);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+
     }
 
 
