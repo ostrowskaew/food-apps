@@ -4,7 +4,8 @@ import { Subject } from 'rxjs/internal/Subject';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {Observable} from "rxjs";
-import {PaymentLink} from "../models/payment-link";
+import {FormGroup} from "@angular/forms";
+import {ShippingDetails} from "../models/shipping-details";
 
 @Injectable()
 export class ShopService {
@@ -13,16 +14,19 @@ export class ShopService {
 
   private productOrder: ProductOrder;
   private orders: ProductOrders = new ProductOrders();
+  private shippingDetails: ShippingDetails;
 
   private productOrderSubject = new Subject<void>();
   private ordersSubject = new Subject<void>();
   private totalSubject = new Subject<void>();
+  private shippingDetailsSubject = new Subject<void>();
 
   private total: number;
 
   ProductOrderChanged = this.productOrderSubject.asObservable();
   OrdersChanged = this.ordersSubject.asObservable();
   TotalChanged = this.totalSubject.asObservable();
+  ShippingDetailsChanged = this.shippingDetailsSubject.asObservable();
 
   constructor(private _httpClient: HttpClient){}
 
@@ -37,6 +41,13 @@ export class ShopService {
   set SelectedProductOrder(value: ProductOrder){
     this.productOrder = value;
     this.productOrderSubject.next();
+  }
+
+  set ShippingDataChanged(value: ShippingDetails) {
+    this.shippingDetails = value;
+    this.shippingDetailsSubject.next();
+    console.log('shipping data changed in service' + this.shippingDetails)
+
   }
 
 
@@ -62,5 +73,20 @@ export class ShopService {
     this.total = value;
     this.totalSubject.next();
   }
+
+  set ShipmentDetails(shipmentDetails: ShippingDetails) {
+    this.shippingDetails = shipmentDetails;
+  }
+
+  get ShippingDetails() {
+    return this.shippingDetails;
+  }
+
+  saveOrderDetails(shippingDetails: FormGroup): Observable<Object> {
+    return this._httpClient.post(this.staticUri+'/api/shipment-details', shippingDetails);
+
+  }
+
+
 
 }

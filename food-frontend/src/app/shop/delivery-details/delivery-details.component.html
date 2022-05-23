@@ -1,0 +1,31 @@
+<!-- Default form contact -->
+<form class="text-center border border-light p-5" [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+  <p class="h4 mb-4">Personal details</p>
+  <input type="text" formControlName="contactFormName" id="defaultContactFormName" mdbInput
+         class="form-control mb-2" placeholder="Name">
+  <input type="text" formControlName="contactFormSurname" id="defaultContactFormSurname" mdbInput
+         class="form-control mb-2" placeholder="Surname">
+  <input type="email" formControlName="contactFormEmail" id="defaultContactFormEmail" mdbInput
+         class="form-control mb-2" placeholder="E-mail">
+  <input type="text" formControlName="contactFormPhone" id="defaultContactFormPhone" mdbInput
+         class="form-control mb-4" placeholder="Phone number">
+
+  <p class="h4 mb-4">Delivery details</p>
+  <input type="text" formControlName="contactFormStreet" id="defaultContactFormStreet" mdbInput
+         class="form-control mb-2" placeholder="Street">
+  <input type="text" formControlName="contactFormBuilding" id="defaultContactFormBuilding" mdbInput
+         class="form-control mb-2" placeholder="Building">
+  <input type="text" formControlName="contactFormApartment" id="defaultContactFormApartment" mdbInput
+         class="form-control mb-2" placeholder="Apartment (Optional)">
+  <input type="text" formControlName="contactFormCompany" id="defaultContactFormCompany" mdbInput
+         class="form-control mb-4" placeholder="Company (Optional)">
+  <input type="text" formControlName="contactFormPostCode" id="defaultContactFormPostCode" mdbInput
+         class="form-control mb-2" placeholder="Apartment (Optional)">
+  <input type="text" formControlName="contactFormCity" id="defaultContactFormCity" mdbInput
+         class="form-control mb-4" placeholder="Company (Optional)">
+  <!-- Send button -->
+  <button  class="btn btn-primary btn-block"
+           type="submit" [disabled]="disabledSubmitButton">Confirm</button>
+
+</form>
+

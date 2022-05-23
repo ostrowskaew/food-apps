@@ -1,9 +1,21 @@
-<h2 class="text-center">ORDER</h2>
+<h2 class="text-center">Ordered food:</h2>
 <ul>
   <li *ngFor="let order of orders.productOrders">
     {{ order.product.name }} - {{ order.product.price }} PLN x {{ order.quantity }} pcs
   </li>
 </ul>
 <h3 class="text-right">Total Amount: {{ total }} PLN</h3>
+<tr></tr>
+<div *ngIf="shippingData != null">
+<h2 class="text-center">Shipment details:</h2>
+<p><strong>NAME:</strong> {{ shippingData.name }}</p>
+<p><strong>SURNAME:</strong> {{ shippingData.surname }}</p>
+<p><strong>ADDRESS:</strong> {{ shippingData.street }} {{ shippingData.building}}/ {{shippingData.apartment}}</p>
+<p><strong>CITY:</strong> {{shippingData.postCode }} {{shippingData.city}}</p>
+<p><strong>COMPANY:</strong> {{shippingData.company }}</p>
+</div>
+
 <button type="button" class="btn btn-primary btn-block" (click)="pay()"
         *ngIf="!paid">Payment</button>
+
+

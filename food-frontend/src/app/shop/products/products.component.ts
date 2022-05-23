@@ -4,6 +4,7 @@ import {ShopService} from "../services/ShopService";
 import {Subscription} from "rxjs/internal/Subscription";
 import {ProductOrders} from "../models/product-orders";
 import {Product} from "../models/product";
+import {ShippingDetails} from "../models/shipping-details";
 
 @Component({
   selector: 'app-products',
@@ -14,6 +15,7 @@ export class ProductsComponent implements OnInit {
   productOrders: ProductOrder[] = [];
   products: Product[] = [];
   selectedProductOrder: ProductOrder;
+  shippingDetails: ShippingDetails;
   private shoppingCartOrders: ProductOrders;
   sub: Subscription;
   productSelected: boolean = false;
@@ -78,5 +80,9 @@ export class ProductsComponent implements OnInit {
     this.shopService.ProductOrders.productOrders = [];
     this.loadOrders();
     this.productSelected = false;
+  }
+
+  confirmDetails(details: ShippingDetails) {
+    this.shippingDetails = details;
   }
 }

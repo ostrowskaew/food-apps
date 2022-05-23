@@ -2,8 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ProductOrders} from "../models/product-orders";
 import {Subscription} from "rxjs/internal/Subscription";
 import {ShopService} from "../services/ShopService";
-import {ProductOrder} from "../models/product-order";
-import {PaymentLink} from "../models/payment-link";
+import {ShippingDetails} from "../models/shipping-details";
 
 @Component({
   selector: 'app-orders',
@@ -15,9 +14,12 @@ export class OrdersComponent implements OnInit {
   total: number;
   paid: boolean;
   sub: Subscription;
+  shippingData: ShippingDetails;
+  subShipping : Subscription;
 
   constructor(private shopService: ShopService) {
     this.orders = this.shopService.ProductOrders;
+    this.shippingData = this.shopService.ShipmentDetails;
   }
 
   ngOnInit() {
@@ -26,6 +28,7 @@ export class OrdersComponent implements OnInit {
       this.orders = this.shopService.ProductOrders;
     });
     this.loadTotal();
+    this.loadShippingChange();
   }
 
   pay() {
@@ -37,6 +40,12 @@ export class OrdersComponent implements OnInit {
       },
       (error) => console.log(error)
     );
+  }
+
+  loadShippingChange() {
+    this.subShipping = this.shopService.ShippingDetailsChanged.subscribe(() => {
+      this.shippingData = this.shopService.ShippingDetails;
+    })
   }
 
   loadTotal() {

@@ -2,6 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {ProductsComponent} from "./products/products.component";
 import {ShoppingCartComponent} from "./shopping-cart/shopping-cart.component";
 import {OrdersComponent} from "./orders/orders.component";
+import {DeliveryDetailsComponent} from "./delivery-details/delivery-details.component";
 
 @Component({
   selector: 'app-shop',
@@ -12,6 +13,7 @@ export class ShopComponent implements OnInit {
 
   collapsed = true;
   orderFinished = false;
+  orderDetailsFinished = false
 
   @ViewChild('productsC')
   productsC: ProductsComponent;
@@ -21,6 +23,10 @@ export class ShopComponent implements OnInit {
 
   @ViewChild('ordersC')
   ordersC: OrdersComponent;
+
+  @ViewChild('deliveryDetailsC')
+  deliveryDetailsC: DeliveryDetailsComponent;
+
 
   constructor() { }
 
@@ -33,6 +39,10 @@ export class ShopComponent implements OnInit {
 
   finishOrder(orderFinished: boolean){
     this.orderFinished = orderFinished;
+  }
+
+  finishOrderDetails(orderDetailsFinished: boolean){
+    this.orderDetailsFinished = orderDetailsFinished;
   }
 
   reset(){
