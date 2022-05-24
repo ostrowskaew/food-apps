@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core';
 import {Observable} from "rxjs";
 import {FormGroup} from "@angular/forms";
 import {ShippingDetails} from "../models/shipping-details";
+import {SocialUser} from "angularx-social-login";
 
 @Injectable()
 export class ShopService {
@@ -87,6 +88,7 @@ export class ShopService {
 
   }
 
-
-
+  loginUser(socialUser: SocialUser): Observable<Object> {
+    return this._httpClient.post(this.staticUri+'/api/login', socialUser);
+  }
 }

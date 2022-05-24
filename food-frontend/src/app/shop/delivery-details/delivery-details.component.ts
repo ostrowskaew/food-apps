@@ -61,6 +61,11 @@ export class DeliveryDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    let use = localStorage.getItem("socialusers");
+    if (use) {
+      const user = JSON.parse(use);
+      this.contactForm.setValue({contactFormName: user.firstName, contactFormSurname: user.lastName})
+    }
   }
 
 }

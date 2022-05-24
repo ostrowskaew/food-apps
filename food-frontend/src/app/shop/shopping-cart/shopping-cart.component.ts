@@ -1,8 +1,9 @@
-import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {ProductOrders} from "../models/product-orders";
 import {ProductOrder} from "../models/product-order";
 import {ShopService} from "../services/ShopService";
 import {Subscription} from "rxjs/internal/Subscription";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-shopping-cart',
@@ -15,9 +16,11 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
   total: number;
   sub: Subscription;
 
+  @Input()
   @Output() onOrderFinished: EventEmitter<boolean>;
 
-  constructor(private shopService: ShopService) {
+  constructor(private shopService: ShopService,
+              private toastr: ToastrService) {
     this.total = 0;
     this.orderFinished = false;
     this.onOrderFinished = new EventEmitter<boolean>();
@@ -42,9 +45,14 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
   }
 
   finishOrder() {
-    this.orderFinished = true;
-    this.shopService.Total = this.total;
-    this.onOrderFinished.emit(this.orderFinished);
+    if (this.canActivate()){
+      this.orderFinished = true;
+      this.shopService.Total = this.total;
+      this.onOrderFinished.emit(this.orderFinished);
+    }
+    else {
+      this.toastr.error('Zaloguj sie', 'Oooops');
+    }
   }
 
   loadTotal() {
@@ -72,5 +80,10 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
     this.orders.productOrders = []
     this.loadTotal();
     this.total = 0;
+  }
+
+  canActivate() {
+    if (localStorage.getItem("socialusers")) { return true; }
+    return false;
   }
 }

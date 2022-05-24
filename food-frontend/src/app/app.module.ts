@@ -16,6 +16,14 @@ import {MatSelectModule} from "@angular/material/select";
 import {MatInputModule} from "@angular/material/input";
 import {MatRadioModule} from "@angular/material/radio";
 import {MatCardModule} from "@angular/material/card";
+import {LoginComponent} from "./login/login.component";
+import {
+  FacebookLoginProvider,
+  SocialLoginModule,
+  SocialAuthServiceConfig,
+} from 'angularx-social-login';
+import {AppRoutingModule} from "./app-routing.module";
+import {ToastrModule} from "ngx-toastr";
 
 @NgModule({
   declarations: [
@@ -24,9 +32,14 @@ import {MatCardModule} from "@angular/material/card";
     OrdersComponent,
     ProductsComponent,
     ShoppingCartComponent,
-    DeliveryDetailsComponent
+    DeliveryDetailsComponent,
+    LoginComponent
   ],
   imports: [
+    SocialLoginModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
+    AppRoutingModule,
     BrowserModule,
     FormsModule,
     BrowserAnimationsModule,
@@ -38,7 +51,20 @@ import {MatCardModule} from "@angular/material/card";
     MatRadioModule,
     MatCardModule
   ],
-  providers: [ShopService],
+  providers: [
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: FacebookLoginProvider.PROVIDER_ID,
+            provider: new FacebookLoginProvider('1729059420773078'),
+          },
+        ],
+      } as SocialAuthServiceConfig,
+    },
+    ShopService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

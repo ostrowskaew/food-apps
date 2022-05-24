@@ -1,3 +1,5 @@
-FROM adoptopenjdk:11-jre-hotspot
-COPY target/food-pg-0.0.1-SNAPSHOT.jar food-pg-1.0.0.jar
-ENTRYPOINT ["java", "-jar", "food-pg-1.0.0.jar"]
+FROM adoptopenjdk/openjdk16:ubi
+VOLUME /tmp
+ARG JAR_FILE
+COPY ${JAR_FILE} food-pg.jar
+ENTRYPOINT ["java","-jar","/food-pg.jar"]
