@@ -1,10 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {ProductOrder} from "../models/product-order";
 import {ShopService} from "../services/ShopService";
 import {Subscription} from "rxjs/internal/Subscription";
 import {ProductOrders} from "../models/product-orders";
 import {Product} from "../models/product";
 import {ShippingDetails} from "../models/shipping-details";
+import {Restaurant} from "../models/restaurant";
 
 @Component({
   selector: 'app-products',
@@ -15,10 +16,21 @@ export class ProductsComponent implements OnInit {
   productOrders: ProductOrder[] = [];
   products: Product[] = [];
   selectedProductOrder: ProductOrder;
-  shippingDetails: ShippingDetails;
   private shoppingCartOrders: ProductOrders;
   sub: Subscription;
   productSelected: boolean = false;
+  isRestaurantSelected: boolean;
+  selcetedRestaurant: Restaurant;
+
+  @Input()
+  set restaurant(res: Restaurant) {
+    if(res != null) {
+      this.productOrders = [];
+      this.selcetedRestaurant = res;
+      this.isRestaurantSelected = true;
+      this.loadProductsFromRestaurant(res);
+    }
+  }
 
   constructor(private shopService: ShopService) {
   }
@@ -27,7 +39,9 @@ export class ProductsComponent implements OnInit {
     this.productOrders = [];
     this.loadProducts();
     this.loadOrders();
+    this.isRestaurantSelected = false;
   }
+
 
   addToCart(order: ProductOrder) {
     this.shopService.SelectedProductOrder = order;
@@ -68,11 +82,25 @@ export class ProductsComponent implements OnInit {
       );
   }
 
+  loadProductsFromRestaurant(restaurant: Restaurant) {
+    this.shopService.getProductsFromRestaurant(restaurant.id)
+      .subscribe(
+        products => {
+          this.products = products as any[];
+          this.products.forEach(product => {
+            this.productOrders.push(new ProductOrder(product, 0));
+          })
+        },
+        (error) => console.log(error)
+      );
+  }
+
   loadOrders() {
     this.sub = this.shopService.OrdersChanged.subscribe(() => {
       this.shoppingCartOrders = this.shopService.ProductOrders;
     });
   }
+
 
   reset() {
     this.productOrders = [];
@@ -82,7 +110,4 @@ export class ProductsComponent implements OnInit {
     this.productSelected = false;
   }
 
-  confirmDetails(details: ShippingDetails) {
-    this.shippingDetails = details;
-  }
 }

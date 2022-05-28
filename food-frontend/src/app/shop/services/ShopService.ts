@@ -1,7 +1,7 @@
 import { ProductOrder } from '../models/product-order';
 import { ProductOrders } from '../models/product-orders';
 import { Subject } from 'rxjs/internal/Subject';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {Observable} from "rxjs";
 import {FormGroup} from "@angular/forms";
@@ -38,6 +38,15 @@ export class ShopService {
 
   getAllProducts(){
     return this._httpClient.get(this.staticUri+'/api/products');
+  }
+
+  getProductsFromRestaurant(restaurantId: number){
+    const params = new HttpParams().append('searchedRestaurantId', restaurantId);
+    return this._httpClient.get(this.staticUri+'/api/product-by-restaurant-id', {params});
+  }
+
+  getAllRestaurnats(){
+    return this._httpClient.get(this.staticUri+'/api/restaurants');
   }
 
   saveOrder(order: ProductOrders, shippingDetails: ShippingDetails): Observable<any>{

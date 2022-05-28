@@ -3,6 +3,7 @@ import {ProductOrders} from "../models/product-orders";
 import {Subscription} from "rxjs/internal/Subscription";
 import {ShopService} from "../services/ShopService";
 import {ShippingDetails} from "../models/shipping-details";
+import {Restaurant} from "../models/restaurant";
 
 @Component({
   selector: 'app-orders',
@@ -27,6 +28,7 @@ export class OrdersComponent implements OnInit {
     this.sub = this.shopService.OrdersChanged.subscribe(() => {
       this.orders = this.shopService.ProductOrders;
     });
+
     this.loadTotal();
     this.loadShippingChange();
   }

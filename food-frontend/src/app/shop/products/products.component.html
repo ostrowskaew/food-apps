@@ -1,3 +1,6 @@
+<div *ngIf="isRestaurantSelected">
+  <h2>{{ selcetedRestaurant.restaurant}}</h2>
+</div>
 <div class="row card-deck">
   <div class="col-lg-4 col-md-6 mb-4" *ngFor="let order of productOrders">
     <div class="card text-center">

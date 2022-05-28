@@ -12,6 +12,8 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Subscription} from "rxjs";
 import {Router} from "@angular/router";
 import {ShopService} from "./services/ShopService";
+import {Restaurant} from "./models/restaurant";
+import {RestaurantListComponent} from "./restaurant-list/restaurant-list.component";
 
 @Component({
   selector: 'app-shop',
@@ -26,12 +28,17 @@ export class ShopComponent implements OnInit, OnDestroy {
   socialUser!: SocialUser;
   isLoggedin?: boolean = false;
   facebookSubscription: Subscription;
+  selectedRestaurant: Restaurant;
+  isRestaurantSelected: boolean = false;
 
   @ViewChild('productsC')
   productsC: ProductsComponent;
 
   @ViewChild('shoppingCartC')
   shoppingCartC: ShoppingCartComponent;
+
+  @ViewChild('restaurantListC')
+  restaurantListC: RestaurantListComponent;
 
   @ViewChild('ordersC')
   ordersC: OrdersComponent;
@@ -96,6 +103,11 @@ export class ShopComponent implements OnInit, OnDestroy {
     this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID);
   }
 
+  restaurantChosen(restaurant: Restaurant) {
+    this.selectedRestaurant = restaurant;
+    this.isRestaurantSelected = true;
+  }
+
   signOut(): void {
     localStorage.removeItem('socialusers');
     localStorage.removeItem('authToken');
@@ -109,6 +121,7 @@ export class ShopComponent implements OnInit, OnDestroy {
     this.productsC.reset();
     this.shoppingCartC.reset();
     this.ordersC.paid = false;
+    this.isRestaurantSelected = false;
   }
 
 }

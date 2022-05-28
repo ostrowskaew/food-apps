@@ -24,6 +24,7 @@ import {
 } from 'angularx-social-login';
 import {AppRoutingModule} from "./app-routing.module";
 import {ToastrModule} from "ngx-toastr";
+import { RestaurantListComponent } from './shop/restaurant-list/restaurant-list.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import {ToastrModule} from "ngx-toastr";
     ProductsComponent,
     ShoppingCartComponent,
     DeliveryDetailsComponent,
-    LoginComponent
+    LoginComponent,
+    RestaurantListComponent
   ],
   imports: [
     SocialLoginModule,
