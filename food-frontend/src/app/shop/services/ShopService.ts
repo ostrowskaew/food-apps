@@ -6,7 +6,8 @@ import { Injectable } from '@angular/core';
 import {Observable} from "rxjs";
 import {FormGroup} from "@angular/forms";
 import {ShippingDetails} from "../models/shipping-details";
-import {SocialUser} from "angularx-social-login";
+import {SocialAuthService, SocialUser} from "angularx-social-login";
+import {Wrapper} from "../models/wrapper";
 
 @Injectable()
 export class ShopService {
@@ -16,11 +17,13 @@ export class ShopService {
   private productOrder: ProductOrder;
   private orders: ProductOrders = new ProductOrders();
   private shippingDetails: ShippingDetails;
+  private socialUser: SocialUser;
 
   private productOrderSubject = new Subject<void>();
   private ordersSubject = new Subject<void>();
   private totalSubject = new Subject<void>();
   private shippingDetailsSubject = new Subject<void>();
+  private socialUserSubject = new Subject<void>();
 
   private total: number;
 
@@ -28,15 +31,18 @@ export class ShopService {
   OrdersChanged = this.ordersSubject.asObservable();
   TotalChanged = this.totalSubject.asObservable();
   ShippingDetailsChanged = this.shippingDetailsSubject.asObservable();
+  socialUserChanged = this.socialUserSubject.asObservable();
 
-  constructor(private _httpClient: HttpClient){}
+  constructor(private _httpClient: HttpClient, private socialAuthService: SocialAuthService){}
+
 
   getAllProducts(){
     return this._httpClient.get(this.staticUri+'/api/products');
   }
 
-  saveOrder(order: ProductOrders): Observable<any>{
-    return this._httpClient.post(this.staticUri+'/api/orders', order);
+  saveOrder(order: ProductOrders, shippingDetails: ShippingDetails): Observable<any>{
+    console.log('id' + this.socialUser.id)
+    return this._httpClient.post(this.staticUri+'/api/orders', new Wrapper(order, shippingDetails, this.socialUser.id) );
   }
 
   set SelectedProductOrder(value: ProductOrder){
@@ -89,6 +95,10 @@ export class ShopService {
   }
 
   loginUser(socialUser: SocialUser): Observable<Object> {
+    this.socialUser = socialUser;
+    this.socialUserSubject.next();
     return this._httpClient.post(this.staticUri+'/api/login', socialUser);
   }
 }
+
+

@@ -1,7 +1,9 @@
 package com.example.foodbackend.service;
 
 import com.example.foodbackend.model.Product;
+import com.example.foodbackend.model.Restaurant;
 import com.example.foodbackend.repository.ProductRepository;
+import com.example.foodbackend.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,9 @@ public class ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private RestaurantRepository restaurantRepository;
 
     public List<Product> getAllProducts(){
         List<Product> products = new ArrayList<>();
@@ -32,16 +37,13 @@ public class ProductService {
         return productRepository.findByNameContainingIgnoreCase(name);
     }
 
-    private int convertToInteger(String text) {
-        try{
-            return Integer.parseInt(text);
-        }
-        catch (NumberFormatException ex){
-            ex.printStackTrace();
-            return -1;
-        }
-
+    public List<Product> getProductByRestaurantId(Long restaurantId) {
+        return productRepository.findByRestaurantId(restaurantId);
     }
 
+    public List<Product> getProductByRestaurantName(String restaurantName) {
+        Restaurant restaurant = restaurantRepository.findByRestaurantContainingIgnoreCase(restaurantName);
+        return productRepository.findByRestaurantId(restaurant.getId());
+    }
 
 }

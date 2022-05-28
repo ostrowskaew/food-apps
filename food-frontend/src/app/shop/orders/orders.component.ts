@@ -33,7 +33,7 @@ export class OrdersComponent implements OnInit {
 
   pay() {
     this.paid = true;
-    this.shopService.saveOrder(this.orders).subscribe(
+    this.shopService.saveOrder(this.orders, this.shippingData).subscribe(
       response => {
         console.log(response)
         window.open(response.generatedLink, "_blank");

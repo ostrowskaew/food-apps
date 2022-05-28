@@ -1,27 +1,26 @@
 export class ShippingDetails {
-  name: string;
-  surname: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  phone: string;
+  company: string;
   street: string;
   building: string;
-  apartment?: string;
-  company?: string;
-  postCode: string;
+  apartment: string;
+  phone: string;
   city: string;
+  postalCode: string;
 
-  constructor(name: string, surname: string, email: string, phone: string, street: string, building: string,
-               postCode: string, city: string, apartment?: string, company?: string) {
-    this.name = name;
-    this.surname = surname;
+  constructor(firstName: string, lastName: string, email: string, company: string, street: string, building: string, apartment: string, phone: string, city: string, postalCode: string) {
+    this.firstName = firstName;
+    this.lastName = lastName;
     this.email = email;
-    this.phone = phone;
+    this.company = company;
     this.street = street;
     this.building = building;
     this.apartment = apartment;
-    this.company = company;
-    this.postCode = postCode;
+    this.phone = phone;
     this.city = city;
+    this.postalCode = postalCode;
   }
 
 }

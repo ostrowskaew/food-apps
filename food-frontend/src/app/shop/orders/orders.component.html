@@ -8,10 +8,10 @@
 <tr></tr>
 <div *ngIf="shippingData != null">
 <h2 class="text-center">Shipment details:</h2>
-<p><strong>NAME:</strong> {{ shippingData.name }}</p>
-<p><strong>SURNAME:</strong> {{ shippingData.surname }}</p>
+<p><strong>NAME:</strong> {{ shippingData.firstName }}</p>
+<p><strong>SURNAME:</strong> {{ shippingData.lastName }}</p>
 <p><strong>ADDRESS:</strong> {{ shippingData.street }} {{ shippingData.building}}/ {{shippingData.apartment}}</p>
-<p><strong>CITY:</strong> {{shippingData.postCode }} {{shippingData.city}}</p>
+<p><strong>CITY:</strong> {{shippingData.postalCode }} {{shippingData.city}}</p>
 <p><strong>COMPANY:</strong> {{shippingData.company }}</p>
 </div>
 

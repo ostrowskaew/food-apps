@@ -42,7 +42,6 @@ public class ProductController {
     }
 
 
-
     @GetMapping("/api/product-by-name")
     public List<Product> getProductByName(@ApiParam(value = "Searched term in product names", required = true)
                                               @NotNull @RequestParam(value = "searchedProductName") String searchedProductName) {
@@ -52,6 +51,32 @@ public class ProductController {
         catch (Exception ex)
         {
             log.error("Exception getting product by name", ex);
+            return null;
+        }
+    }
+
+    @GetMapping("/api/product-by-restaurant-id")
+    public List<Product> getProductByRestaurantId(@ApiParam(value = "Searched product by restaurant id", required = true)
+                                          @NotNull @RequestParam(value = "searchedRestaurantId") Long searchedRestaurantId) {
+        try {
+            return productService.getProductByRestaurantId(searchedRestaurantId);
+        }
+        catch (Exception ex)
+        {
+            log.error("Exception getting product by restaurant id", ex);
+            return null;
+        }
+    }
+
+    @GetMapping("/api/product-by-restaurant-name")
+    public List<Product> getProductByRestaurantName(@ApiParam(value = "Searched product by restaurant name", required = true)
+                                                @NotNull @RequestParam(value = "searchedRestaurantName") String searchedRestaurantName) {
+        try {
+            return productService.getProductByRestaurantName(searchedRestaurantName);
+        }
+        catch (Exception ex)
+        {
+            log.error("Exception getting product by restaurant name", ex);
             return null;
         }
     }

@@ -1,17 +1,17 @@
 package com.example.foodbackend.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -31,6 +31,16 @@ public class Order {
     @OneToMany(mappedBy = "pk.order")
     private List<OrderProduct> orderProducts = new ArrayList<>();
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "person_id")
+    private Person person;
+
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "shipping_details_id")
+    private ShippingDetails shippingDetails;
+
     @Transient
     public Double getTotalOrderPrice() {
         double sum = 0D;
@@ -39,11 +49,6 @@ public class Order {
             sum += op.getTotalPrice();
         }
         return sum;
-    }
-
-    @Transient
-    public int getNumberOfProducts() {
-        return this.orderProducts.size();
     }
 
 }
