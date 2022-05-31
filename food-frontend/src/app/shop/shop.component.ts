@@ -14,6 +14,7 @@ import {Router} from "@angular/router";
 import {ShopService} from "./services/ShopService";
 import {Restaurant} from "./models/restaurant";
 import {RestaurantListComponent} from "./restaurant-list/restaurant-list.component";
+import {Loader} from "@googlemaps/js-api-loader";
 
 @Component({
   selector: 'app-shop',
@@ -46,6 +47,13 @@ export class ShopComponent implements OnInit, OnDestroy {
   @ViewChild('deliveryDetailsC')
   deliveryDetailsC: DeliveryDetailsComponent;
 
+  title = 'google-maps';
+
+  private map: google.maps.Map;
+  private geocoder: google.maps.Geocoder;
+  private location = {lat: 51.111156258906945, lng: 17.059641231497707};
+  private restaurants: Restaurant[] = [];
+
   constructor(
     private router: Router,
     private formBuilder: FormBuilder,
@@ -67,6 +75,65 @@ export class ShopComponent implements OnInit, OnDestroy {
         this.saveData();
       }
     });
+
+    this.loadRestaurants()
+    this.initMap();
+  }
+
+  initMap() {
+    let loader = new Loader({
+      apiKey: 'APIKEYGOOGLEs'
+    })
+    loader.load().then(() => {
+
+      this.map = new google.maps.Map(document.getElementById("map")!,
+        {
+          center: this.location,
+          zoom: 15
+        }
+      )
+      this.geocoder = new google.maps.Geocoder();
+
+      this.codeAddress(this.geocoder, this.map);
+    });
+  }
+
+  codeAddress(geocoder: google.maps.Geocoder, map: google.maps.Map) {
+    this.restaurants.forEach((restaurant) => {
+      geocoder.geocode({'address': restaurant.address}, (results, status) => {
+        {
+          console.log(results);
+          if (results != null) {
+            var latLng = {lat: results[0].geometry.location.lat()!, lng: results[0].geometry.location.lng()};
+            console.log(latLng);
+            if (status == 'OK') {
+              var marker = new google.maps.Marker({
+                position: latLng,
+                map: map
+              });
+
+              marker.addListener("click", () => {
+                map.setZoom(20);
+                map.setCenter(marker.getPosition() as google.maps.LatLng);
+                this.restaurantChosen(restaurant);
+              });
+            }
+          } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+          }
+        }
+      })
+    });
+  }
+
+  loadRestaurants() {
+    this.shopService.getAllRestaurnats()
+      .subscribe(
+        restaurants => {
+          this.restaurants = restaurants as any[];
+        },
+        (error) => console.log(error)
+      );
   }
 
   saveData() {
@@ -81,34 +148,49 @@ export class ShopComponent implements OnInit, OnDestroy {
   }
 
 
-  ngOnDestroy(){
-    if(this.facebookSubscription)
+  ngOnDestroy() {
+    if (this.facebookSubscription)
       this.facebookSubscription.unsubscribe()
   }
 
 
-  toggleCollapsed(): void {
+  toggleCollapsed()
+    :
+    void {
     this.collapsed = !this.collapsed;
   }
 
-  finishOrder(orderFinished: boolean) {
+  finishOrder(orderFinished
+                :
+                boolean
+  ) {
     this.orderFinished = orderFinished;
   }
 
-  finishOrderDetails(orderDetailsFinished: boolean) {
+  finishOrderDetails(orderDetailsFinished
+                       :
+                       boolean
+  ) {
     this.orderDetailsFinished = orderDetailsFinished;
   }
 
-  loginWithFacebook(): void {
+  loginWithFacebook()
+    :
+    void {
     this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID);
   }
 
-  restaurantChosen(restaurant: Restaurant) {
+  restaurantChosen(restaurant
+                     :
+                     Restaurant
+  ) {
     this.selectedRestaurant = restaurant;
     this.isRestaurantSelected = true;
   }
 
-  signOut(): void {
+  signOut()
+    :
+    void {
     localStorage.removeItem('socialusers');
     localStorage.removeItem('authToken');
     this.isLoggedin = false;
