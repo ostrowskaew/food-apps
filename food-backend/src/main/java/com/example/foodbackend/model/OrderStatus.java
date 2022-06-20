@@ -2,5 +2,6 @@ package com.example.foodbackend.model;
 
 public enum OrderStatus {
     PAID,
-    UNPAID
+    UNPAID,
+    NEW
 }

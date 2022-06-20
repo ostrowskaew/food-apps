@@ -15,7 +15,10 @@
 <p><strong>COMPANY:</strong> {{shippingData.company }}</p>
 </div>
 
-<button type="button" class="btn btn-primary btn-block" (click)="pay()"
-        *ngIf="!paid">Payment</button>
+<button type="button" class="btn btn-success btn-block" (click)="pay()"
+        *ngIf="!paid">Payment onlinet </button>
+
+<button type="button" class="btn btn-primary btn-block" (click)="payCash()"
+        *ngIf="!paid">Payment with cash</button>
 
 

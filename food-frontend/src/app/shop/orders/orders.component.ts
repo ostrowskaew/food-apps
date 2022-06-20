@@ -35,7 +35,7 @@ export class OrdersComponent implements OnInit {
 
   pay() {
     this.paid = true;
-    this.shopService.saveOrder(this.orders, this.shippingData).subscribe(
+    this.shopService.saveOrder(this.orders, this.shippingData, 0).subscribe(
       response => {
         console.log(response)
         window.open(response.generatedLink, "_blank");
@@ -54,5 +54,16 @@ export class OrdersComponent implements OnInit {
     this.sub = this.shopService.TotalChanged.subscribe(() => {
       this.total = this.shopService.Total;
     });
+  }
+
+  payCash() {
+    this.paid = true;
+    this.shopService.saveOrder(this.orders, this.shippingData, 1).subscribe(
+      response => {
+        console.log(response)
+        window.open(response.generatedLink, "_blank");
+      },
+      (error) => console.log(error)
+    );
   }
 }

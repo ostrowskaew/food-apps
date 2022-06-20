@@ -52,6 +52,8 @@ export class ShopComponent implements OnInit, OnDestroy {
   private map: google.maps.Map;
   private geocoder: google.maps.Geocoder;
   private location = {lat: 51.111156258906945, lng: 17.059641231497707};
+  // private location = {lat: 52.238221, lng: 21.031497};
+  private radius = 10000;
   private restaurants: Restaurant[] = [];
 
   constructor(
@@ -82,19 +84,39 @@ export class ShopComponent implements OnInit, OnDestroy {
 
   initMap() {
     let loader = new Loader({
-      apiKey: 'APIKEYGOOGLEs'
+      apiKey: 'AIzaSyAvzQBETE5wCBJXlx5U5s8eW1KKancfSak',
+      libraries: ['geometry', 'drawing', 'visualization']
     })
     loader.load().then(() => {
 
       this.map = new google.maps.Map(document.getElementById("map")!,
         {
           center: this.location,
-          zoom: 15
+          zoom: 14
         }
       )
       this.geocoder = new google.maps.Geocoder();
 
       this.codeAddress(this.geocoder, this.map);
+
+      var marker = new google.maps.Marker({
+        position: this.location,
+        map: this.map,
+        icon: {
+          url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+        }
+      });
+
+      var circle = new google.maps.Circle({
+        center: this.location,
+        radius: this.radius,
+        fillColor: "#1010fd",
+        fillOpacity: 0.1,
+        map: this.map,
+        strokeColor: "#FFFFFF",
+        strokeOpacity: 0.1,
+        strokeWeight: 2
+      });
     });
   }
 
@@ -102,18 +124,21 @@ export class ShopComponent implements OnInit, OnDestroy {
     this.restaurants.forEach((restaurant) => {
       geocoder.geocode({'address': restaurant.address}, (results, status) => {
         {
-          console.log(results);
           if (results != null) {
             var latLng = {lat: results[0].geometry.location.lat()!, lng: results[0].geometry.location.lng()};
-            console.log(latLng);
             if (status == 'OK') {
+              var distance = google.maps.geometry.spherical.computeDistanceBetween (latLng, this.location);
+              if(distance > this.radius) {
+                return
+              }
               var marker = new google.maps.Marker({
                 position: latLng,
                 map: map
               });
 
               marker.addListener("click", () => {
-                map.setZoom(20);
+                map.setZoom(16);
+                map.setClickableIcons(true);
                 map.setCenter(marker.getPosition() as google.maps.LatLng);
                 this.restaurantChosen(restaurant);
               });

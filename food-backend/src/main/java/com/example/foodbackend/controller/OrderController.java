@@ -48,6 +48,9 @@ public class OrderController {
     @Autowired
     private PersonService personService;
 
+    @Autowired
+    private FinalizeOrderService finalizeOrderService;
+
 
     @GetMapping("/api/orders")
     @ResponseStatus(HttpStatus.OK)
@@ -72,6 +75,21 @@ public class OrderController {
         }
     }
 
+    @Data
+    public static class Status {
+        Long orderId;
+        String orderStatus;
+    }
+
+    @PostMapping("/api/save-status")
+    public void getUsersOrder(@RequestBody Status status) {
+        Order order = orderService.getUsersOrders(status.getOrderId());
+        order.setStatus(status.getOrderStatus());
+        if (status.getOrderStatus().equals("SUCCESS"))
+            finalizeOrderService.addOrderToQueue(order);
+        orderService.update(order);
+    }
+
 
     @PostMapping("/api/orders")
     public ResponseEntity<PaymentGeneratedLinkDTO> create(@RequestBody Wrapper wrapper) {
@@ -81,10 +99,12 @@ public class OrderController {
 
         List<OrderProductDto> formDtos = wrapper.order.getProductOrders();
         Order order = new Order();
-        order.setStatus(OrderStatus.UNPAID.name());
+        order.setStatus(OrderStatus.NEW.name());
         order.setShippingDetails(shippingDetails);
         order.setPerson(personService.getPersonById(wrapper.userId));
+        order.setPaymentMethod(wrapper.getPaymentMethod());
         order = orderService.create(order);
+
 
         List<OrderProduct> orderProducts = new ArrayList<>();
         for (OrderProductDto dto : formDtos) {
@@ -98,8 +118,6 @@ public class OrderController {
         orderService.update(order);
 
         try {
-            PaymentGeneratedLinkDTO paymentGeneratedLinkDTO = paymentService.payOrder(order);
-
             String uri = ServletUriComponentsBuilder
                     .fromCurrentServletMapping()
                     .path("/orders/{id}")
@@ -107,7 +125,13 @@ public class OrderController {
                     .toString();
             HttpHeaders headers = new HttpHeaders();
             headers.add("Location", uri);
-            order.setStatus(OrderStatus.PAID.name());
+
+            if(wrapper.paymentMethod == 1){
+                finalizeOrderService.addOrderToQueue(order);
+                return new ResponseEntity<>(new PaymentGeneratedLinkDTO("http://localhost:4200/thank-you?OrderID="+order.getId()+"&type=1", order.getId().toString()), headers, HttpStatus.CREATED);
+            }
+            PaymentGeneratedLinkDTO paymentGeneratedLinkDTO = paymentService.payOrder(order);
+            order.setStatus(OrderStatus.UNPAID.name());
             orderService.update(order);
 
             return new ResponseEntity<>(paymentGeneratedLinkDTO, headers, HttpStatus.CREATED);
@@ -136,6 +160,8 @@ public class OrderController {
         OrderForm order;
         ShippingDTO shippingDetails;
         String userId;
+
+        int paymentMethod;
 
     }
 

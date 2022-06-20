@@ -1,15 +1,15 @@
 package com.example.foodbackend.service;
 
-import com.example.foodbackend.dto.OrderProductDto;
 import com.example.foodbackend.model.Order;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-//@Service
 @RestController
 public class FinalizeOrderService {
 
@@ -20,8 +20,14 @@ public class FinalizeOrderService {
         this.amqpTemplate = amqpTemplate;
     }
 
-    @GetMapping("/send-order-to-queue")
-    public void addOrderToQueue() {
-        amqpTemplate.convertAndSend("order.queue", "ORDER:" + LocalDateTime.now());
+
+    @Data
+    @AllArgsConstructor
+    public static class FinalizeOrder implements Serializable {
+        Long orderId;
+    }
+
+    public void addOrderToQueue(Order order) {
+        amqpTemplate.convertAndSend("order.queue", new FinalizeOrder(order.getId()));
     }
 }

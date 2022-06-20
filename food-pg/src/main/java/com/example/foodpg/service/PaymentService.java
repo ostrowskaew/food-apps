@@ -77,7 +77,7 @@ public class PaymentService {
     }
 
     private INGTransactionRequestDTO getTransactionRequestDTO(Payment payment, PaymentDTO paymentDTO) {
-        String url = returnUrl + "&OrderID=" + payment.getOrderId();
+        String url = returnUrl + "?OrderID=" + payment.getOrderId();
         INGCustomerDTO INGCustomerDTO = generateCustomerDTO(paymentDTO);
         INGTransactionRequestDTO transactionRequestDTO = new INGTransactionRequestDTO();
         transactionRequestDTO.setServiceId(serviceId);

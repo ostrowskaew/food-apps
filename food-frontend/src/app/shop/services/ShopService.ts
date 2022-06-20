@@ -8,11 +8,13 @@ import {FormGroup} from "@angular/forms";
 import {ShippingDetails} from "../models/shipping-details";
 import {SocialAuthService, SocialUser} from "angularx-social-login";
 import {Wrapper} from "../models/wrapper";
+import {Status} from "../models/status";
 
 @Injectable()
 export class ShopService {
 
   private staticUri = "http://localhost:8081";
+  private staticPGUri = "http://localhost:8090";
 
   private productOrder: ProductOrder;
   private orders: ProductOrders = new ProductOrders();
@@ -45,13 +47,24 @@ export class ShopService {
     return this._httpClient.get(this.staticUri+'/api/product-by-restaurant-id', {params});
   }
 
+  getPaymentStatus(orderId: number){
+    const params = new HttpParams().append('orderId', orderId);
+    return this._httpClient.get(this.staticPGUri+'/api/status', {params});
+  }
+
+  saveStatus(orderId: number, orderStatus: string): Observable<any>{
+    return this._httpClient.post(this.staticUri+'/api/save-status', new Status(orderId, orderStatus) );
+  }
+
   getAllRestaurnats(){
     return this._httpClient.get(this.staticUri+'/api/restaurants');
   }
 
-  saveOrder(order: ProductOrders, shippingDetails: ShippingDetails): Observable<any>{
-    console.log('id' + this.socialUser.id)
-    return this._httpClient.post(this.staticUri+'/api/orders', new Wrapper(order, shippingDetails, this.socialUser.id) );
+  saveOrder(order: ProductOrders, shippingDetails: ShippingDetails, paymentMethod: number): Observable<any>{
+    const user = JSON.parse(localStorage.getItem("socialusers")!);
+    console.log(user);
+    console.log(user.id);
+    return this._httpClient.post(this.staticUri+'/api/orders', new Wrapper(order, shippingDetails, user.id, paymentMethod) );
   }
 
   set SelectedProductOrder(value: ProductOrder){

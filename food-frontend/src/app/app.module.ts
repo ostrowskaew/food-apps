@@ -25,6 +25,7 @@ import {
 import {AppRoutingModule} from "./app-routing.module";
 import {ToastrModule} from "ngx-toastr";
 import { RestaurantListComponent } from './shop/restaurant-list/restaurant-list.component';
+import { ThankYouComponent } from './thank-you/thank-you.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { RestaurantListComponent } from './shop/restaurant-list/restaurant-list.
     ShoppingCartComponent,
     DeliveryDetailsComponent,
     LoginComponent,
-    RestaurantListComponent
+    RestaurantListComponent,
+    ThankYouComponent
   ],
   imports: [
     SocialLoginModule,
